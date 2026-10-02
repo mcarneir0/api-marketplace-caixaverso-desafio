@@ -9,6 +9,6 @@ public interface ConfirmacaoPagamentoRepository
         extends JpaRepository<ConfirmacaoPagamento, Long> {
     Optional<ConfirmacaoPagamento> findByCarrinhoId(Long carrinhoId);
 
+    boolean existsByCarrinhoId(Long carrinhoId);
     boolean existsByIdPagamento(String idPagamento);
-
 }

@@ -72,4 +72,18 @@ public class GlobalExceptionHandler {
                 campos);
         return ResponseEntity.status(status).body(response);
     }
+
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<ApiErrorResponse> tratarNaoEncontrado(
+            RecursoNaoEncontradoException erro, HttpServletRequest request) {
+        return resposta(HttpStatus.NOT_FOUND, erro.getMessage(), request, Map.of());
+    }
+
+    @ExceptionHandler({RegraNegocioException.class, ConflitoNegocioException.class})
+    public ResponseEntity<ApiErrorResponse> tratarConflito(
+            RuntimeException erro, HttpServletRequest request) {
+        return resposta(HttpStatus.CONFLICT, erro.getMessage(), request, Map.of());
+    }
+
+
 }

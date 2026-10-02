@@ -68,14 +68,10 @@ public class ConfirmacaoPagamento {
      * TODO aprovar somente pagamento pendente e finalizar o carrinho.
      */
     public void aprovar() {
-        if (status != StatusPagamento.PENDENTE) {
-            throw new RegraNegocioException(
-                    "Pagamento não está pendente."
-            );
-        }
-        status = StatusPagamento.PAGO;
-        confirmadoEm = Instant.now();
-        carrinho.finalizar();
+        exigirPendente();
+        this.carrinho.finalizar();
+        this.status = StatusPagamento.PAGO;
+        this.confirmadoEm = Instant.now();
 
         //throw new UnsupportedOperationException("TODO implementar aprovar");
     }
@@ -84,14 +80,8 @@ public class ConfirmacaoPagamento {
      * TODO recusar somente pagamento pendente.
      */
     public void recusar() {
-        if (status != StatusPagamento.PENDENTE) {
-                throw new RegraNegocioException(
-                    "Pagamento não está pendente."
-            );
-        }
-
-        status = StatusPagamento.RECUSADO;
-        confirmadoEm = Instant.now();
+        exigirPendente();
+        this.status = StatusPagamento.RECUSADO;
 
         //throw new UnsupportedOperationException("TODO implementar recusar");
     }
@@ -103,6 +93,13 @@ public class ConfirmacaoPagamento {
         return status == StatusPagamento.PAGO;
         //throw new UnsupportedOperationException("TODO implementar estaPago");
     }
+
+    private void exigirPendente() {
+        if (this.status != StatusPagamento.PENDENTE) {
+            throw new RegraNegocioException("O pagamento já foi processado e não pode mudar de estado.");
+        }
+    }
+
 
     public Long getId() {
         return id;
