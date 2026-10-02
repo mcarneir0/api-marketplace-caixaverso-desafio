@@ -12,10 +12,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 
-/** Confirma o resultado de pagamento de um carrinho pertencente a um usuário. */
+/**
+ * Confirma o resultado de pagamento de um carrinho pertencente a um usuário.
+ */
 @Entity
 @Table(name = "confirmacoes_pagamento")
 public class ConfirmacaoPagamento {
@@ -60,26 +63,71 @@ public class ConfirmacaoPagamento {
         this.status = StatusPagamento.PENDENTE;
     }
 
-    /** TODO aprovar somente pagamento pendente e finalizar o carrinho. */
+    /**
+     * TODO aprovar somente pagamento pendente e finalizar o carrinho.
+     */
     public void aprovar() {
-        throw new UnsupportedOperationException("TODO implementar aprovar");
+        if (status != StatusPagamento.PENDENTE) {
+            throw new UnsupportedOperationException(
+                    "Pagamento não está pendente."
+            );
+        }
+        status = StatusPagamento.PAGO;
+        confirmadoEm = Instant.now();
+        carrinho.finalizar();
+
+        //throw new UnsupportedOperationException("TODO implementar aprovar");
     }
 
-    /** TODO recusar somente pagamento pendente. */
+    /**
+     * TODO recusar somente pagamento pendente.
+     */
     public void recusar() {
-        throw new UnsupportedOperationException("TODO implementar recusar");
+        if (status != StatusPagamento.PENDENTE) {
+            throw new UnsupportedOperationException(
+                    "Pagamento não está pendente."
+            );
+        }
+
+        status = StatusPagamento.RECUSADO;
+        confirmadoEm = Instant.now();
+
+        //throw new UnsupportedOperationException("TODO implementar recusar");
     }
 
-    /** TODO devolver verdadeiro apenas para status PAGO. */
+    /**
+     * TODO devolver verdadeiro apenas para status PAGO.
+     */
     public boolean estaPago() {
-        throw new UnsupportedOperationException("TODO implementar estaPago");
+        return status == StatusPagamento.PAGO;
+        //throw new UnsupportedOperationException("TODO implementar estaPago");
     }
 
-    public Long getId() { return id; }
-    public Carrinho getCarrinho() { return carrinho; }
-    public Usuario getUsuario() { return usuario; }
-    public String getIdPagamento() { return idPagamento; }
-    public StatusPagamento getStatus() { return status; }
-    public BigDecimal getValorPago() { return valorPago; }
-    public Instant getConfirmadoEm() { return confirmadoEm; }
+    public Long getId() {
+        return id;
+    }
+
+    public Carrinho getCarrinho() {
+        return carrinho;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public String getIdPagamento() {
+        return idPagamento;
+    }
+
+    public StatusPagamento getStatus() {
+        return status;
+    }
+
+    public BigDecimal getValorPago() {
+        return valorPago;
+    }
+
+    public Instant getConfirmadoEm() {
+        return confirmadoEm;
+    }
 }
