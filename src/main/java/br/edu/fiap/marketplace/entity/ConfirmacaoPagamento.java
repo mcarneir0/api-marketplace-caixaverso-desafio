@@ -1,5 +1,6 @@
 package br.edu.fiap.marketplace.entity;
 
+import br.edu.fiap.marketplace.exception.RegraNegocioException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -68,7 +69,7 @@ public class ConfirmacaoPagamento {
      */
     public void aprovar() {
         if (status != StatusPagamento.PENDENTE) {
-            throw new UnsupportedOperationException(
+            throw new RegraNegocioException(
                     "Pagamento não está pendente."
             );
         }
@@ -84,7 +85,7 @@ public class ConfirmacaoPagamento {
      */
     public void recusar() {
         if (status != StatusPagamento.PENDENTE) {
-            throw new UnsupportedOperationException(
+                throw new RegraNegocioException(
                     "Pagamento não está pendente."
             );
         }
