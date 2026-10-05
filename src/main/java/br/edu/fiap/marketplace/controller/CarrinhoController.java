@@ -4,7 +4,7 @@ import br.edu.fiap.marketplace.dto.CarrinhoRequest;
 import br.edu.fiap.marketplace.dto.CarrinhoResponse;
 import br.edu.fiap.marketplace.service.CarrinhoService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
