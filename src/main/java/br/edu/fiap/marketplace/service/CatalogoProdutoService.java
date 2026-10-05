@@ -24,7 +24,7 @@ public class CatalogoProdutoService {
         this.catalogoProdutoRepository = catalogoProdutoRepository;
     }
 
-    @Transactional( readOnly = true )
+    @Transactional
     public CatalogoProdutoResponse cadastrarProduto( CatalogoProdutoRequest request ) {
 
         Optional<CatalogoProduto> produtoEncontrado = catalogoProdutoRepository.findByNome( request.nome() );
@@ -89,6 +89,7 @@ public class CatalogoProdutoService {
         return response;
     }
 
+    @Transactional
     public CatalogoProdutoResponse baixarEstoque(Long id, AtualizarQuantidadeRequest request) {
         CatalogoProduto produto = buscar( id );
 
@@ -101,6 +102,7 @@ public class CatalogoProdutoService {
         return response;
     }
 
+    @Transactional
     public CatalogoProdutoResponse reporEstoque(Long id, AtualizarQuantidadeRequest request) {
         CatalogoProduto produto = buscar( id );
 
@@ -111,6 +113,13 @@ public class CatalogoProdutoService {
         CatalogoProdutoResponse response = CatalogoProdutoResponse.de( produtoSalvo );
 
         return response;
+    }
+
+    @Transactional
+    public void excluirProduto( Long id ) {
+        CatalogoProduto produto = buscar( id );
+
+        catalogoProdutoRepository.delete( produto );
     }
 
     private CatalogoProduto buscar( Long id) {
