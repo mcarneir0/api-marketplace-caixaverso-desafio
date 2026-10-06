@@ -1,5 +1,6 @@
 package br.edu.fiap.marketplace.entity;
 
+import br.edu.fiap.marketplace.exception.RegraNegocioException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,10 +13,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 
-/** Confirma o resultado de pagamento de um carrinho pertencente a um usuário. */
+/**
+ * Confirma o resultado de pagamento de um carrinho pertencente a um usuário.
+ */
 @Entity
 @Table(name = "confirmacoes_pagamento")
 public class ConfirmacaoPagamento {
@@ -60,26 +64,68 @@ public class ConfirmacaoPagamento {
         this.status = StatusPagamento.PENDENTE;
     }
 
-    /** TODO aprovar somente pagamento pendente e finalizar o carrinho. */
+    /**
+     * TODO aprovar somente pagamento pendente e finalizar o carrinho.
+     */
     public void aprovar() {
-        throw new UnsupportedOperationException("TODO implementar aprovar");
+        exigirPendente();
+        this.carrinho.finalizar();
+        this.status = StatusPagamento.PAGO;
+        this.confirmadoEm = Instant.now();
+
+        //throw new UnsupportedOperationException("TODO implementar aprovar");
     }
 
-    /** TODO recusar somente pagamento pendente. */
+    /**
+     * TODO recusar somente pagamento pendente.
+     */
     public void recusar() {
-        throw new UnsupportedOperationException("TODO implementar recusar");
+        exigirPendente();
+        this.status = StatusPagamento.RECUSADO;
+
+        //throw new UnsupportedOperationException("TODO implementar recusar");
     }
 
-    /** TODO devolver verdadeiro apenas para status PAGO. */
+    /**
+     * TODO devolver verdadeiro apenas para status PAGO.
+     */
     public boolean estaPago() {
-        throw new UnsupportedOperationException("TODO implementar estaPago");
+        return status == StatusPagamento.PAGO;
+        //throw new UnsupportedOperationException("TODO implementar estaPago");
     }
 
-    public Long getId() { return id; }
-    public Carrinho getCarrinho() { return carrinho; }
-    public Usuario getUsuario() { return usuario; }
-    public String getIdPagamento() { return idPagamento; }
-    public StatusPagamento getStatus() { return status; }
-    public BigDecimal getValorPago() { return valorPago; }
-    public Instant getConfirmadoEm() { return confirmadoEm; }
+    private void exigirPendente() {
+        if (this.status != StatusPagamento.PENDENTE) {
+            throw new RegraNegocioException("O pagamento já foi processado e não pode mudar de estado.");
+        }
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public Carrinho getCarrinho() {
+        return carrinho;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public String getIdPagamento() {
+        return idPagamento;
+    }
+
+    public StatusPagamento getStatus() {
+        return status;
+    }
+
+    public BigDecimal getValorPago() {
+        return valorPago;
+    }
+
+    public Instant getConfirmadoEm() {
+        return confirmadoEm;
+    }
 }

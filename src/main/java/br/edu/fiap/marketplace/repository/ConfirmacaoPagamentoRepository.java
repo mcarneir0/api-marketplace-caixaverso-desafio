@@ -1,9 +1,14 @@
 package br.edu.fiap.marketplace.repository;
 
 import br.edu.fiap.marketplace.entity.ConfirmacaoPagamento;
+import org.hibernate.internal.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /** TODO adicionar consultas por carrinho e pelo identificador externo do pagamento. */
 public interface ConfirmacaoPagamentoRepository
         extends JpaRepository<ConfirmacaoPagamento, Long> {
+    Optional<ConfirmacaoPagamento> findByCarrinhoId(Long carrinhoId);
+
+    boolean existsByCarrinhoId(Long carrinhoId);
+    boolean existsByIdPagamento(String idPagamento);
 }
